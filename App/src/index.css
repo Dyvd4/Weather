@@ -12,8 +12,23 @@ body{
   background-color: white;
   padding: 0.5em;
   min-height: 50vh;
+  width: 100vh;
   max-width: 100vh;
   box-shadow: 0 0 4px 2px lightgray;
   display: grid;
   grid-template-rows: 2fr 1fr;
+}
+.loading{
+  border-radius: 50%;
+  border:16px solid lightgray;
+  border-top: 16px solid #0084ff;
+  border-right: 16px solid #0084ff;
+  animation:load 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+@keyframes load{
+  from {transform: rotate(0deg); }
+  to{transform: rotate(360deg);}
 }

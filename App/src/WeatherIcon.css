@@ -1,0 +1,13 @@
+.sun {
+    color: #ffbb00;
+}
+
+.rain {}
+
+.thunderstorm {}
+
+.cloud, .rain, .thunderstorm,.snow {
+    color: gray;
+}
+
+.snow {}
