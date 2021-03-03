@@ -37,7 +37,8 @@ class Wrapper extends Component {
     let oldData = this.state.data;
     oldData.apiCallUnit = unit;
     this.setState({
-      data: oldData
+      data: oldData,
+      gotCoords:true
     });
     this.getWeatherData();
   }
@@ -91,7 +92,8 @@ class Wrapper extends Component {
       oldData.weather.data= data;
       this.setState({
         data: oldData,
-        gotWeatherData: true
+        gotWeatherData: true,
+        gotCoords:false
       });
       clearInterval(this.getWeatherData);
     }
