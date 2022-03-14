@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import "../bootstrap.css";
-import "../index.css";
-import { Line } from "react-chartjs-2";
-import "../Details.css";
 import moment from 'moment';
 import 'moment/locale/de';
-import WeatherIcon from './WeatherIcon';
+import { Component } from "react";
+import { Line } from "react-chartjs-2";
+import "../bootstrap.css";
+import "../Details.css";
+import "../index.css";
 import LoadingCircle from './LoadingCircle';
+import WeatherIcon from './WeatherIcon';
 class Details extends Component {
 
   getLineChartData(hourlyData, currentDate) {
@@ -70,14 +70,12 @@ class Details extends Component {
     }
     else {
       return (
-        <div style={{ textAlign: "center", margin:"2em 0"}}>
-          <h5>No data available</h5>
-          <div style={{transform:"translate(-25px, -25px)"}} className="center">
-            <LoadingCircle
-              size="50px"
-              borderWidth="10px"
-            />
-          </div>
+        <div>
+          <h5 style={{ textAlign: "center", marginTop: "1em" }}>No data available</h5>
+          <LoadingCircle
+            size="50px"
+            borderWidth="10px"
+          />
         </div>
 
       );
@@ -88,7 +86,7 @@ class Details extends Component {
     let currentDate = moment.unix(current.dt).format("DD:MM:YYYY");
     let chartData = this.getLineChartData(hourly, currentDate);
     let chartOptions = this.getLineChartOptions();
-    let unitIsCelsius= this.props.data.apiCallUnit === "metric";
+    let unitIsCelsius = this.props.data.apiCallUnit === "metric";
     moment.locale('de');
     return (
       <div className="details-wrapper">
@@ -102,13 +100,13 @@ class Details extends Component {
                     size="lg"
                   />
                 </div>
-                <span id="currentTemperature">{(!current.temp.day) ? Math.round(current.temp): Math.round(current.temp.day)}</span>
+                <span id="currentTemperature">{(!current.temp.day) ? Math.round(current.temp) : Math.round(current.temp.day)}</span>
               </div>
 
               <div className="info-group-item" id="config">
-                <span onClick={()=>this.props.onClick("metric")} className={(unitIsCelsius)?"temperatureConfig-item": "temperatureConfig-item text-secondary"}>°C</span>
+                <span onClick={() => this.props.onClick("metric")} className={(unitIsCelsius) ? "temperatureConfig-item" : "temperatureConfig-item text-secondary"}>°C</span>
                 <span className="temperatureConfig-item">|</span>
-                <span onClick={()=>this.props.onClick("imperial")} className={(unitIsCelsius)?"temperatureConfig-item text-secondary": "temperatureConfig-item"}>°F</span>
+                <span onClick={() => this.props.onClick("imperial")} className={(unitIsCelsius) ? "temperatureConfig-item text-secondary" : "temperatureConfig-item"}>°F</span>
               </div>
 
               <div className="info-group-item" id="secondary">

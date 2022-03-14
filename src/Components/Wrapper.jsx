@@ -1,28 +1,49 @@
-import React, { Component } from "react";
+import moment from 'moment';
+import { Component } from "react";
 import "../bootstrap.css";
 import "../index.css";
 import Details from "./Details";
-import Preview from "./Preview";
 import LoadingCircle from './LoadingCircle';
-import moment from 'moment';
+import Preview from "./Preview";
 class Wrapper extends Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount() {
-    this.componentIsMounted = true;
-    this.getCoords();
-    setInterval(this.getWeatherData, 500);
-    setInterval(this.getGeolocation, 500);
+  componentDidMount = () => {
+    this.fetchCords();
   }
   state = {
+    loading: true,
     data: {
       weather: {},
       apiCallUnit: "metric"
     },
-    selectedDay: moment().format("DD:MM:YYYY"),
-    gotCoords: false,
-    gotWeatherData: false
+    selectedDay: moment().format("DD:MM:YYYY")
+  };
+  fetchCords = () => {
+    this.setState({ loading: true }, () => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let { latitude, longitude } = position.coords;
+        this.setState({
+          data: {
+            ...this.state.data,
+            location: {
+              latitude,
+              longitude,
+            }
+          }
+        }, () => {
+          this.fetchWeatherData();
+        });
+      });
+    });
+  };
+  fetchWeatherData = async () => {
+    var lat = this.state.data.location.latitude;
+    var lon = this.state.data.location.longitude;
+    const key = process.env.REACT_APP_WeatherApiKey;
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${this.state.data.apiCallUnit}&lang=de&appid=${key}`);
+    const data = await response.json();
+    let oldData = this.state.data;
+    oldData.weather.data = data;
+    this.setState({ data: oldData, loading: false });
   };
   loadCurrentTab = (currentForecast) => {
     let oldData = this.state.data;
@@ -38,12 +59,12 @@ class Wrapper extends Component {
     oldData.apiCallUnit = unit;
     this.setState({
       data: oldData,
-      gotCoords:true
+      selectedDay: moment().format("DD:MM:YYYY")
     });
-    this.getWeatherData();
+    this.fetchWeatherData();
   }
   render() {
-    if (this.state.gotWeatherData) {
+    if (!this.state.loading) {
       return (
         <div className="container center">
           <Details onClick={this.switchTemperatureUnit} data={this.state.data}></Details>
@@ -57,47 +78,6 @@ class Wrapper extends Component {
       </div>
     );
   }
-  getCoords = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      var { latitude, longitude } = position.coords;
-
-      this.state.data.location = {
-        latitude,
-        longitude,
-      };
-      this.setState({ gotCoords: true });
-    });
-  };
-  getGeolocation = async () => {
-    if (this.state.gotCoords == true) {
-      const key = process.env.REACT_APP_GoogleApiKey;
-      var lat = this.state.data.location.latitude;
-      var lon = this.state.data.location.longitude;
-      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${key}`);
-      const data = await response.json();
-
-      clearInterval(this.getGeolocation);
-    }
-
-  }
-  getWeatherData = async () => {
-    if (this.state.gotCoords == true) {
-      var lat = this.state.data.location.latitude;
-      var lon = this.state.data.location.longitude;
-      const key = process.env.REACT_APP_WeatherApiKey;
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${this.state.data.apiCallUnit}&lang=de&appid=${key}`);
-      const data = await response.json();
-
-      let oldData = this.state.data;
-      oldData.weather.data= data;
-      this.setState({
-        data: oldData,
-        gotWeatherData: true,
-        gotCoords:false
-      });
-      clearInterval(this.getWeatherData);
-    }
-  };
 }
 
 export default Wrapper;

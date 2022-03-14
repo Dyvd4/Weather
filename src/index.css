@@ -24,9 +24,6 @@ body{
   border-top: 16px solid #0084ff;
   border-right: 16px solid #0084ff;
   animation:load 1s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
 }
 @keyframes load{
   from {transform: rotate(0deg); }
