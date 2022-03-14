@@ -118,7 +118,7 @@ class Details extends Component {
           </div>
           <div style={{ display: "inline", float: "right" }}>
             <div className="info-group-2" id="third">
-              <h3>Backnang</h3>
+              <h3>No city available</h3>
               <h5 className="text-secondary">{moment.unix(current.dt).format("dddd")}</h5>
               <h5 className="text-secondary">{current.weather[0].description}</h5>
             </div>
