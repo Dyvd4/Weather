@@ -1,5 +1,6 @@
 {
   "name": "wheater",
+  "homepage": "https://weatherw.herokuapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
